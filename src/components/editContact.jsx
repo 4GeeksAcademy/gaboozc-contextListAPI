@@ -1,8 +1,15 @@
+// Import React library and hooks for managing state and side effects
 import React, { useState, useEffect } from 'react';
+// Import useParams to access dynamic route parameters (like contact ID)
 import { useParams } from 'react-router-dom';
 
+// Define the EditContact component
 const EditContact = () => {
+
+  // Extract the `id` from the URL (e.g., /edit/123 → id = 123)
   const { id } = useParams();
+
+  // Initialize state to store the contact data being edited
   const [contact, setContact] = useState({
     name: '',
     email: '',
@@ -10,53 +17,58 @@ const EditContact = () => {
     address: ''
   });
 
+  // Fetch contact data when component loads or when `id` changes
   useEffect(() => {
     const fetchContact = async () => {
       try {
+        // Send GET request to fetch a single contact by ID
         const response = await fetch(`https://playground.4geeks.com/contact/agendas/gaboozc/contacts/${id}`);
         if (response.ok) {
-          const data = await response.json();
-          setContact(data);
+          const data = await response.json(); // Parse response as JSON
+          setContact(data); // Populate form fields with fetched data
         } else {
-          console.error('Failed to fetch contact');
+          console.error('Failed to fetch contact'); // Log if fetch fails
         }
       } catch (error) {
-        console.error('Error fetching contact:', error);
+        console.error('Error fetching contact:', error); // Log network or server errors
       }
     };
 
-    fetchContact();
-  }, [id]);
+    fetchContact(); // Call the function immediately
+  }, [id]); // Dependency ensures it runs again if `id` changes
 
+  // Update state whenever a form input changes
   const handleInputChange = (event) => {
-    const { name, value } = event.target;
-    setContact({ ...contact, [name]: value });
+    const { name, value } = event.target; // Destructure input name and its current value
+    setContact({ ...contact, [name]: value }); // Update only the changed field
   };
 
+  // Handle form submission to update contact
   const handleSubmit = async (event) => {
-    event.preventDefault();
+    event.preventDefault(); // Prevent page reload on form submit
+
     try {
+      // Send PUT request to update contact by ID
       const response = await fetch(`https://playground.4geeks.com/contact/agendas/gaboozc/contacts/${id}`, {
-        method: 'PUT',
+        method: 'PUT', // HTTP method for updating data
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json', // Tell server we're sending JSON
         },
-        body: JSON.stringify(contact),
+        body: JSON.stringify(contact), // Send updated data as JSON
       });
 
       if (response.ok) {
-        const data = await response.json();
-        console.log('Contact updated successfully:', data);
-       
+        const data = await response.json(); // Parse response
+        console.log('Contact updated successfully:', data); // Log success
       } else {
-        console.error('Failed to update contact');
+        console.error('Failed to update contact'); // Log failure
       }
     } catch (error) {
-      console.error('Error updating contact:', error);
+      console.error('Error updating contact:', error); // Log network or server errors
     }
   };
 
-  // Inline styles
+  // Inline styles for the container
   const elementStyle = {
     backgroundColor: '#ffffff',
     border: '2px solid #000000',
@@ -67,6 +79,7 @@ const EditContact = () => {
     margin: 'auto'
   };
 
+  // Style for the title
   const h1Style = {
     fontSize: '24px',
     fontFamily: 'Arial, sans-serif',
@@ -75,12 +88,14 @@ const EditContact = () => {
     marginBottom: '20px'
   };
 
+  // Style for form labels
   const labelStyle = {
     display: 'block',
     marginBottom: '8px',
     fontWeight: 'bold'
   };
 
+  // Style for inputs
   const inputStyle = {
     width: '100%',
     padding: '10px',
@@ -89,6 +104,7 @@ const EditContact = () => {
     borderRadius: '5px'
   };
 
+  // Style for submit button
   const buttonStyle = {
     width: '100%',
     padding: '10px',
@@ -100,6 +116,7 @@ const EditContact = () => {
     fontWeight: 'bold'
   };
 
+  // Style for the bottom link
   const linkStyle = {
     display: 'block',
     textAlign: 'center',
@@ -108,21 +125,26 @@ const EditContact = () => {
     textDecoration: 'none'
   };
 
+  // JSX returned by the component
   return (
     <div style={elementStyle}>
-      <h1 style={h1Style}>Edit Contact</h1>
-      <form onSubmit={handleSubmit}>
+      <h1 style={h1Style}>Edit Contact</h1> {/* Page title */}
+      <form onSubmit={handleSubmit}> {/* Form submission handler */}
+        
+        {/* Full Name Field */}
         <div style={{ marginBottom: '20px' }}>
           <label style={labelStyle}>Full Name</label>
           <input
             type="text"
             name="name"
-            value={contact.name}
+            value={contact.name} // Bind input to state
             placeholder="Enter full name"
-            onChange={handleInputChange}
+            onChange={handleInputChange} // Update on change
             style={inputStyle}
           />
         </div>
+
+        {/* Email Field */}
         <div style={{ marginBottom: '20px' }}>
           <label style={labelStyle}>Email</label>
           <input
@@ -134,6 +156,8 @@ const EditContact = () => {
             style={inputStyle}
           />
         </div>
+
+        {/* Phone Field */}
         <div style={{ marginBottom: '20px' }}>
           <label style={labelStyle}>Phone</label>
           <input
@@ -145,6 +169,8 @@ const EditContact = () => {
             style={inputStyle}
           />
         </div>
+
+        {/* Address Field */}
         <div style={{ marginBottom: '20px' }}>
           <label style={labelStyle}>Address</label>
           <input
@@ -156,81 +182,16 @@ const EditContact = () => {
             style={inputStyle}
           />
         </div>
+
+        {/* Submit Button */}
         <button type="submit" style={buttonStyle}>Save</button>
       </form>
+
+      {/* Navigation link (no real routing here yet) */}
       <a href="#" style={linkStyle}>or get back to contacts</a>
     </div>
   );
 };
 
+// Export component for usage in other files
 export default EditContact;
-
-
-
-// import react, {useContext} from "react";
-// // import {context} from "../store";
-// import useGlobalReducer from "../hooks/useGlobalReducer";
-
-// const editContact = () => {
-//     const {store, dispatch} = useGlobalReducer();
-//     const handleDelete = (id) => { dispatch({ type: "delete_contact", payload: {id} });
-// fetch('https://playground.4geeks.com/contact/agendas/gaboozc/contacts/${id}', {
-//     method: 'DELETE'
-// })
-// .then(response => response.json())
-// .then(Data => console.log("deleted:", data))
-// .catch(error => console.error("error:", error))
-// };
-
-// return (
-//     <div>
-//         {store.contacts.map(contact => (
-//             <div key={contact.id}>
-//                 <h2>{contact.name}</h2>
-//                 <button onClick={() =>handleDelete(contact.id)}>delete</button>
-//                 <Link to="/editContact">
-//                 <button>edit contact</button>
-//                 </Link></div>
-//         ))}
-//     </div>
-// );
-// };
-// export default editContact;
-
-
-
-
-// import React from "react";
-
-// export const ContactCard = ({ contact, onDelete, onEdit }) => {
-//   return (
-//     <div className="card mb-3">
-//       <div className="row no-gutters">
-//         <div className="col-md-4">
-//           <img
-//             src=""
-//             className="card-img"
-//             alt="contact"
-//           />
-//         </div>
-//         <div className="col-md-8">
-//           <div className="card-body">
-//             <h5 className="card-title">{contact.name}</h5>
-//             <p className="card-text">
-//               <strong>Email:</strong> {contact.email}
-//             </p>
-//             <p className="card-text">
-//               <strong>Phone:</strong> {contact.phone}
-//             </p>
-//             <button className="btn btn-warning me-2" onClick={() => onEdit(contact)}>
-//               Edit
-//             </button>
-//             <button className="btn btn-danger" onClick={() => onDelete(contact.id)}>
-//               Delete
-//             </button>
-//           </div>
-//         </div>
-//       </div>
-//     </div>
-//   );
-// };
