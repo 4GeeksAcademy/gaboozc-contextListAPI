@@ -1,11 +1,8 @@
-// Import React and necessary hooks
+// Home page: loads contacts from API into global store, renders list, supports edit/delete actions.
 import React, { useState, useEffect } from "react";
-// useNavigate is used to programmatically navigate between routes
 import { useNavigate } from "react-router-dom";
-// Custom hook for accessing global state and dispatch actions
 import useGlobalReducer from "../hooks/useGlobalReducer";
 
-// Main component
 export const Home = () => {
   const { store, dispatch } = useGlobalReducer(); // Access global state and dispatch
   const navigate = useNavigate(); // Initialize navigation hook
@@ -22,7 +19,7 @@ export const Home = () => {
 
   // Creates an empty contact list if not already present on the API
   const createContactList = async () => {
-    await fetch("https://playground.4geeks.com/contact/agendas/gaboozc", {
+    await fetch("https://playground.4geeks.com/contact/agendas/lsantiago3", {
       method: "POST", // Create a new list
       headers: {
         "Content-Type": "application/json",
@@ -33,7 +30,7 @@ export const Home = () => {
   // Fetch all contacts from the API
   const getContacts = async () => {
     let response = await fetch(
-      "https://playground.4geeks.com/contact/agendas/gaboozc/contacts"
+      "https://playground.4geeks.com/contact/agendas/lsantiago3/contacts"
     );
 
     if (!response.ok) {
@@ -57,7 +54,7 @@ export const Home = () => {
   const confirmDelete = async () => {
     try {
       const response = await fetch(
-        `https://playground.4geeks.com/contact/agendas/gaboozc/contacts/${selectedContactId}`,
+        `https://playground.4geeks.com/contact/agendas/lsantiago3/contacts/${selectedContactId}`,
         {
           method: 'DELETE', // Remove contact
           headers: {
@@ -65,10 +62,9 @@ export const Home = () => {
           },
         }
       );
-
       if (response.ok) {
         dispatch({
-          type: "delete_task", // Update global state
+          type: "delete_task", // Update global state (note: reducer expects delete_contact)
           payload: selectedContactId,
         });
         setShowModal(false); // Close modal

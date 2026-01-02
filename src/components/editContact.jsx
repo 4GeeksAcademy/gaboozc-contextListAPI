@@ -1,12 +1,9 @@
-// Import React library and hooks for managing state and side effects
+// Edit flow: read id from URL, fetch existing record, bind fields to state, PUT on submit.
 import React, { useState, useEffect } from 'react';
-// Import useParams to access dynamic route parameters (like contact ID)
 import { useParams } from 'react-router-dom';
 
-// Define the EditContact component
 const EditContact = () => {
 
-  // Extract the `id` from the URL (e.g., /edit/123 → id = 123)
   const { id } = useParams();
 
   // Initialize state to store the contact data being edited
@@ -16,7 +13,6 @@ const EditContact = () => {
     phone: '',
     address: ''
   });
-
   // Fetch contact data when component loads or when `id` changes
   useEffect(() => {
     const fetchContact = async () => {

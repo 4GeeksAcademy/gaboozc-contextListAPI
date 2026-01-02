@@ -1,3 +1,4 @@
+// Route map: Layout wraps Home, Add, and Edit (with :id param) plus a simple error element.
 import {
   createBrowserRouter,
   createRoutesFromElements,

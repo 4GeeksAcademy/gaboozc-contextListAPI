@@ -1,7 +1,6 @@
-// Import React and the useState hook from the 'react' library
+// Add flow: keep form state locally, POST a new contact to the API on submit.
 import React, { useState } from 'react';
 
-// Define the AddContact functional component
 const AddContact = () => {
 
   // Initialize state for the contact form fields
